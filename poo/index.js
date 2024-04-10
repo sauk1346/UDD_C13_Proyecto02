@@ -1,8 +1,8 @@
 /*
 --- POO solution ---
 Construir un programa en JavaScript que permita a los usuarios crear encuestas, votar y ver los resultados en tiempo real.
-- [ ] Permitir a los usuarios crear encuestas con opciones de respuesta.
-- [ ] Permitir a los usuarios votar en las encuestas.
+- [x] Permitir a los usuarios crear encuestas con opciones de respuesta.
+- [x] Permitir a los usuarios votar en las encuestas.
 - [ ] Mostrar los resultados de las encuestas.
 - [ ] Almacenar los datos de las encuestas y los votos en una variable.
 - [ ] Almacenar los datos de las encuestas y los votos en una estructura de datos.
@@ -11,35 +11,41 @@ Construir un programa en JavaScript que permita a los usuarios crear encuestas, 
 
 class Encuesta {
     constructor(datos) {
-        this.preguntas = datos.map(element => element[0]);
-        this.respuestas = datos.map(element => element.slice(1));
+        this.datos = datos;
+        //this.preguntas = this.datos.map( i => i[0] );
+        //this.opciones = this.datos.map( j => j.slice(1) );
+    };
+    
+    votar(pregunta,opciones) {
+        return (prompt( pregunta + '\n\n Escriba su opción:\n\n- ' + opciones.join('\n- ')));
+        
     };
 };
 
-
 let datos = [
-    ['AA','a','a','a','a'],  //pregunta, respuesta1, respuesta2, respuesta3, ....
-    ['BB','b','b','b','b'],
-    ['CC','c','c','c','c'],
-    ['DD','d','d','d','d'],
-    ['EE','e','e','e','e'],
-    ['FF','f','f','f','f'],
-    ['GG','g','g','g','g'],
-    ['HH','h','h','h','h']
+    ['Pregunta1','opcion a','opcion b','opcion c','opcion d'],
+    ['Pregunta2','opcion a','opcion b'],
+    ['Pregunta3','opcion a','opcion b','opcion c'],
+    ['Pregunta4','opcion a','opcion b'],
+    ['Pregunta5','opcion a','opcion b','opcion c','opcion d'],
+    ['Pregunta6','opcion a','opcion b','opcion c','opcion d'],
+    ['Pregunta7','opcion a','opcion b','opcion c'],
+    ['Pregunta8','opcion a','opcion b']  
 ];
 
-enc = new Encuesta(datos);
 
-console.log('preguntas:', enc.preguntas);
-console.log('respuestas:', enc.respuestas);
+let encuesta = new Encuesta(datos);
+let votos = [];
+for (let i=0; i<datos.length; i++) {
+    let pregunta = datos[i][0];
+    let opciones = datos[i].slice(1);
+    console.log(pregunta);
+    console.log(opciones);
+    votos.push( encuesta.votar(pregunta,opciones) );
+};
 
-/*
-//separar "datos" en "preguntas" y "respuestas"
-let preguntas = datos.map(element => element[0]);
-let respuestas = datos.map(element => element.slice(1)); 
 
-console.log(datos);
-console.log('preguntas:', preguntas);
-console.log('respuestas:', respuestas);
-*/
+//console.log(encuesta.preguntas);
+//console.log(encuesta.opciones);
+//console.log('votos:',votos);
 
