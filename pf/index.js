@@ -1,5 +1,5 @@
 /*
-- [ ] reemplazar iteraciones do-while y for, por funciones para satisfacer paradigma de Programación Funcional
+- [x] reemplazar iteraciones do-while y for, por funciones para satisfacer paradigma de Programación Funcional
 - [ ] revisar si es posible que una funcion llame a otra, para reducir código.
 - [ ] Checkeo final
     - [ ] no hay estado global
@@ -8,42 +8,36 @@
     - [ ] no hay bucles: se utiliza recursividad u otras funciones de librería.
 */
 
-function numPreguntas() {
+function getNum() {
     let value = prompt('----- GENERADOR DE ENCUESTA -----\n\n Ingrese la cantidad de preguntas para la encuesta\n\n (cantidad debe ser igual o mayor a 8)');
     return (value >= 8) && (!isNaN(+value)) ? value : numPreguntas();
 };
-function ingresarDatos(numPreguntas) {
-    const datos = Array.from( 
+function getDatos(numPreguntas) {
+    return Array.from( 
         {length: numPreguntas},
         (element,index) => prompt(`----- GENERADOR DE ENCUESTA -----\n\n Ingrese la pregunta ${index+1} en formato:\n\n Pregunta ${index+1},respuesta 1,respuesta 2,respuesta 3,....`).split(",") );
-    return datos;
+};
+function getVotos(datos) {
+    const preguntas = datos.map(i => i[0]);
+    const opciones = datos.map(j => j.slice(1));
+    return Array.from(
+        {length: datos.length},
+        (element,index) => [preguntas[index], prompt( `----- GENERADOR DE ENCUESTA -----\n\n Pregunta ${index+1}:    ${preguntas[index]}\n\n- ${opciones[index].join('\n- ' )}` )] );
+    /*
+    const value = datos.map(element,index => 
+        [element[0], prompt( `----- GENERADOR DE ENCUESTA -----\n\n Pregunta ${index+1}:    ${element[0]}\n\n- ${opcion.join('\n- ' )}` )]
+    ) 
+    return value;
+    */    
 };
 
-let num = numPreguntas();
-let datos = ingresarDatos(num);
+let num = getNum();
+let datos = getDatos(num);
+let votos = getVotos(datos);
 
-console.log(datos);
-
+console.log(votos);
 
 /*
-function ingresarDatos(numPreguntas) {
-    for (let i=0; i<numPreguntas; i++) {
-        let dato = prompt(`----- GENERADOR DE ENCUESTA -----\n\n Ingrese la pregunta ${i+1} en formato:\n\n Pregunta ${i+1},respuesta 1,respuesta 2,respuesta 3,....`).split(",");
-        let datos.push(dato); //duda 
-    };
-    let preguntas = datos.map( i => i[0] );
-    let opciones = datos.map( j => j.slice(1) );
-    return [preguntas,opciones];
-};
-function votar(preguntas,opciones) {
-    for ( let i=0; i<preguntas.length; i++ ) {
-        let pregunta = preguntas[i];
-        let opcion = opciones[i];
-        let voto = prompt( `----- GENERADOR DE ENCUESTA -----\n\n Pregunta ${i+1}:    ${pregunta}\n\n- ${opcion.join('\n- ' )}` );
-        let votos.push( [pregunta, voto] ); //duda
-    };
-    return votos;
-};
 function mostrarVotos(votos) {
     votos.forEach( (element,indice) => {
         console.log(`resultado pregunta ${indice+1} : ${element[1]}`);
