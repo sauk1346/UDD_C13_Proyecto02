@@ -124,4 +124,5 @@ Existen atributos que pudieron ser omitidos, como por ejemplo `numPreguntas` y `
 - OpenWebinars: [*Qué es la Programación Funcional y sus características*](https://openwebinars.net/blog/que-es-la-programacion-funcional-y-sus-caracteristicas/)
 - ScalerTopics: [*Returning multiple values from a Function in JS*](https://www.scaler.com/topics/javascript-return-multiple-values/)
 - KeepCoding: [*Callbacks y su solución para la creación infinita de elementos if*](https://keepcoding.io/blog/que-son-los-callbacks-en-javascript/)
-- KeepCoding: [Arrays y Programación Funcional en JS](https://keepcoding.io/blog/arrays-y-programacion-funcional-en-javascript/)
+- KeepCoding: [*Arrays y Programación Funcional en JS*](https://keepcoding.io/blog/arrays-y-programacion-funcional-en-javascript/)
+- Youtube@JohnOrtizOrdoñez: [*Ejercicio 881: Demostrar el Uso de la Función Array.from() para Crear un Arreglo*](https://www.youtube.com/watch?v=kJM-ste2XOs)
