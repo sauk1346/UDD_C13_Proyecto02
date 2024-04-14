@@ -117,5 +117,11 @@ class Encuesta {
 ### 3.1 POO
 Este proyecto permitió comprender y utilizar las ventajas de este paradigma, como por ejemplo la reutilización de código. Se utilizaron métodos para asignar valores a atributos, y se reutilizaron estos mismos atributos como argumentos de entradas para los siguiente métodos, haciendo el código más legible a la lectura y así facilitar la colaboración.
 Existen atributos que pudieron ser omitidos, como por ejemplo `numPreguntas` y `datos`. Sin embargo, se declaran a modo de buena práctica, ya que en una encuesta real es necesaria la mayor cantidad de información para gestionar y consultar una base de datos. 
+
 ## 4. Referencias
-- [StackOverflow: How to check if prompt input is not a number](https://stackoverflow.com/questions/36552735/javascript-prompt-while-input-is-not-a-number)
+- UDD BootCamp Web FullStack, clases 05 a 08, [Profesor Brian Guzmán M.](https://cl.linkedin.com/in/brianguzman) 
+- StackOverflow: [*How to check if prompt input is not a number*](https://stackoverflow.com/questions/36552735/javascript-prompt-while-input-is-not-a-number)
+- OpenWebinars: [*Qué es la Programación Funcional y sus características*](https://openwebinars.net/blog/que-es-la-programacion-funcional-y-sus-caracteristicas/)
+- ScalerTopics: [*Returning multiple values from a Function in JS*](https://www.scaler.com/topics/javascript-return-multiple-values/)
+- KeepCoding: [*Callbacks y su solución para la creación infinita de elementos if*](https://keepcoding.io/blog/que-son-los-callbacks-en-javascript/)
+- KeepCoding: [Arrays y Programación Funcional en JS](https://keepcoding.io/blog/arrays-y-programacion-funcional-en-javascript/)
