@@ -14,6 +14,8 @@ class Encuesta {
         this.datos = datos;
         this.preguntas = this.datos.map( i => i[0] );
         this.opciones = this.datos.map( j => j.slice(1) );
+        //console.log(this.preguntas);
+        //console.log(this.opciones);
     };    
     votar() {
         let votos = [];
@@ -21,6 +23,7 @@ class Encuesta {
         for ( let i=0; i<this.preguntas.length; i++ ) {
             let pregunta = this.preguntas[i];
             let opcion = this.opciones[i];
+            //console.log(opcion);
             let voto = prompt( `--Escriba su opción--\n\n${pregunta}\n\n-${opcion.join('\n-' )}` );
             votos.push( [pregunta, voto] );
         };
@@ -33,6 +36,7 @@ class Encuesta {
     }
 };
 
+/*
 let datos = [
     ['Azul en ingles','blue','red','orange','pink'],
     ['Capital de Chile','Concepción','Santiago'],
@@ -43,6 +47,23 @@ let datos = [
     ['¿Qué es la palta?','fruta','verdura','hortaliza'],
     ['¿Plutón es un planeta?','Si','No']  
 ];
+*/
+
+
+let numPreguntas; 
+let datos = [];
+
+do {
+    numPreguntas = prompt('----- GENERADOR DE ENCUESTA -----\n\n Ingrese la cantidad de preguntas para la encuesta\n\n (cantidad debe ser igual o mayor a 8)');
+}while(numPreguntas < 8);
+
+for (let i=0; i<numPreguntas; i++) {
+    let dato = prompt(`----- GENERADOR DE ENCUESTA -----\n\n Ingrese la pregunta ${i+1} en formato:\n\n Pregunta ${i+1},respuesta 1,respuesta 2,respuesta 3,....`)
+    datos.push(dato);
+};
+
+//console.log(datos);
+
 
 let encuesta = new Encuesta(datos);
 let votos = encuesta.votar();
