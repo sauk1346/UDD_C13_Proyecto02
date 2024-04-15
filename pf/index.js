@@ -2,7 +2,7 @@ function getNumPreg(numEnc) {
     let value = prompt(`----- GENERADOR DE ENCUESTAS -----\n\n ENCUESTA N${numEnc}:\n\n Ingrese la cantidad de preguntas\n\n (cantidad debe ser igual o mayor a 8)`);
     return (value >= 8) && (!isNaN(+value)) ? value : getNumPreg(numEnc);
 };
-function getDatos(numEnc,numPreg) {
+function getDatos(numEnc, numPreg) {
     let datos = [];
     datos = Array.from( 
         {length: numPreg},
@@ -12,16 +12,16 @@ function getDatos(numEnc,numPreg) {
     const opciones = datos.map(j => j.slice(1));
     return [datos,preguntas,opciones];
 };
-function getVotos(numEnc,numPreg,preguntas,opciones) {
+function getVotos(numEnc, numPreg, preguntas, opciones) {
     return Array.from(
         {length: numPreg},
         (element,index) => prompt(`----- GENERADOR DE ENCUESTAS -----\n\n ENCUESTA N${numEnc}, Pregunta ${index+1}:\n\n ${preguntas[index]}\n\n- ${opciones[index].join('\n- ')}`) );
 };
-function displayVotos(numEnc,votos) {
+function displayVotos(numEnc, votos) {
     votos.forEach( (element,index) => {console.log(`Resultados Encuesta N${numEnc}: pregunta ${index+1} - ${element}`)} );
-}
-function makeEncuestas(index) {
-    const encuestas = [];
+};
+function makeEncuestas(listaEnc, index) {
+    const encuestas = listaEnc;
     const enc = {
         numEnc: index,
         numPreg: "",
@@ -34,10 +34,9 @@ function makeEncuestas(index) {
     [enc.datos, enc.preguntas, enc.opciones] = getDatos(enc.numEnc, enc.numPreg);
     enc.votos = getVotos(enc.numEnc, enc.numPreg, enc.preguntas, enc.opciones);
     displayVotos(enc.numEnc, enc.votos);
-    encuestas.push(enc); //problema: no almacena en array
+    encuestas.push(enc);
     let value = prompt( `----- GENERADOR DE ENCUESTAS -----\n\n ¿Desea Generar otra Encuesta? (s/n)` );
-    return (value != 'n') && (value !='N') ? makeEncuestas(index+1) : encuestas;
+    return (value != 'n') && (value !='N') ? makeEncuestas(encuestas, index+1) : encuestas;
 };
-
 let index = 1;
-let encuestas = makeEncuestas(index);
+let encuestas = makeEncuestas([],index);

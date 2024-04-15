@@ -14,10 +14,12 @@
   - [2.5. Método `displayVotos()`](#25-método-displayvotos)
   - [2.6. Código Principal](#26-código-principal)
 - [3. Solución PF](#3-solución-pf)
-  - [3.1. Función `getNum()`](#31-función-getnum)
+  - [3.1. Función `getNumPreg()`](#31-función-getnumpreg)
   - [3.2. Función `getDatos()`](#32-función-getdatos)
   - [3.3. Función `getVotos()`](#33-función-getvotos)
   - [3.4. Función `displayVotos()`](#34-función-displayvotos)
+  - [3.5. Función `makeEncuestas()`](#35-función-makeencuestas)
+  - [3.6. Código Principal](#36-código-principal)
 - [4. Conclusión](#4-conclusión)
 - [5. Referencias](#5-referencias)
 
@@ -30,22 +32,14 @@ Este segundo proyecto consiste en construir un programa en JavaScript que permit
 - Mostrar los resultados de las encuestas en tiempo real.
 - Almacenar los datos de las encuestas y los votos en una variable.
 
-Tanto la solución POO como PF, tienen las siguientes características y supuestos:
-
-**Características soluciones POO y PF**
-- El usuario ingresa datos de forma iterativa, en formato: `pregunta,opción1,opción2,...`
-- Los datos ingresados generan una encuesta.
-- El usuario responde las preguntas de la encuesta de forma iterativa, ingresando su opción de forma indivual.
+Tanto la solución POO como PF, tienen las siguientes características:
+- El usuario ingresa datos de forma iterativa mediante la función `prompt()` en formato `pregunta,opción1,opción2,...`
+- El usuario responde las preguntas de la encuesta de forma iterativa, ingresando cada opción de forma indivual.
 - El programa muestra los votos en consola.
-- Para POO, se almacenan los datos de cada encuesta y votos en un objeto de clase `Encuesta`. Se pueden acceder a los datos mediante sus atributos:
-  - `num`: número de preguntas de la encuesta.
-  - `preguntas`: preguntas realizadas en la encuesta.
-  - `opciones`: conjunto de alternativas para cada pregunta de la encuesta.
-  - `votos`: opcion elegida para cada pregunta. 
-- Para PF, 
-- El programa no solicita datos personales, ya que se trabaja bajo el supuesto de una encuesta anónima.
-- El programa no cuenta el número de encuestas, ya que no se solicita para el proyecto.
-- El programa no cuenta el número de votos por pregunta, ya que no se solicita para el proyecto. 
+- El programa guarda la encuesta en un array de encuestas.
+- El programa solicitará crear una nueva encuesta.
+  - Si el usuario acepta, se repetirán los pasos anteriores.
+  - Si el usuario no acepta, el programa finaliza.
 
 
 ## 2. Solución POO
@@ -144,7 +138,6 @@ class Encuesta {
     displayVotos() {
         this.votos.forEach( (element,index) => {console.log(`Resultados Encuesta N${this.numEnc}: pregunta ${index+1} - ${element}`)} );
     };
-};
 ```
 - No recibe argumentos de entrada.
 - Recorre atributo `votos` y muestra en consola sus elementos.
@@ -186,65 +179,121 @@ Se implementan funciones que cumplan las principales características de este pa
 - **Todos los valores son inmutables:** lo único que podemos hacer es generar nuevos valores.
 - **No hay bucles:** La iteración se realiza utilizando recursividad.
 
-Para la toma de decisiones se reemplaza la instrucción `if` por el **operador ternario**, el cual sí está permitido.
+**Consideraciones**
+- Para la toma de decisiones se reemplaza la instrucción `if` por el **operador ternario**, el cual está permitido.
+- Cada encuesta sea crea a partir de un **objeto literal** mediante pares clave-valor, el cual está permitido. 
 
-### 3.1. Función `getNum()`
+### 3.1. Función `getNumPreg()`
 
 ```JavaScript
-function getNum() {
-    let value = prompt('----- GENERADOR DE ENCUESTA -----\n\n Ingrese la cantidad de preguntas para la encuesta\n\n (cantidad debe ser igual o mayor a 8)');
-    return (value >= 8) && (!isNaN(+value)) ? value : getNum();
+function getNumPreg(numEnc) {
+    let value = prompt(`----- GENERADOR DE ENCUESTAS -----\n\n ENCUESTA N${numEnc}:\n\n Ingrese la cantidad de preguntas\n\n (cantidad debe ser igual o mayor a 8)`);
+    return (value >= 8) && (!isNaN(+value)) ? value : getNumPreg(numEnc);
 };
 ```
-- Almacena el valor ingresado por el usuario en una variable auxiliar `value`.
+- Recibe el argumento `numEnc`, de tipo numérico, representa el valor de índice de la encuesta.
+- Solicita al usuario el número de preguntas. Almacena el valor en una variable auxiliar `value`.
 - Retorna la instrucción del operador ternario.
-  - Si el valor cumple la condición, entrega el valor.
-  - Si el valor no cumple la condición, llama a la función de forma recursiva.
+  - Si el valor cumple la condición, la función `getNumPreg()` retorna `value`.
+  - Si el valor no cumple la condición, la función `getNumPreg()` se llama a si misma.
 
 ### 3.2. Función `getDatos()` 
 ```JavaScript
-function getDatos(num) {
-    return Array.from( 
-        {length: num},
-        (element,index) => prompt(`----- GENERADOR DE ENCUESTA -----\n\n Ingrese la pregunta ${index+1} en formato:\n\n Pregunta ${index+1},respuesta 1,respuesta 2,respuesta 3,...`).split(",") );
+function getDatos(numEnc, numPreg) {
+    let datos = [];
+    datos = Array.from( 
+        {length: numPreg},
+        (element,index) => prompt(`----- GENERADOR DE ENCUESTAS -----\n\n ENCUESTA N${numEnc}:\n\n Ingrese la pregunta ${index+1} en formato:\n\n Pregunta ${index+1},respuesta 1,respuesta 2,respuesta 3,...`).split(",")
+    );
+    const preguntas = datos.map(i => i[0]);
+    const opciones = datos.map(j => j.slice(1));
+    return [datos,preguntas,opciones];
 };
 ```
-- Recibe un argumento `num` de tipo numérico.
-- Crea y retorna un arreglo multidimensional de largo `num`.
-  - Utiliza el método `Array.from( x => f(x) )` para crear el arreglo retornado.
-  - Los elementos del arreglo retornado son arreglos unidimensionales `[pregunta,opcion1,opcion2,opcion3,...]`.
+- Recibe 2 argumentos.
+  - `numEnc` de tipo numérico. Representa el valor de índice de la encuesta.
+  - `numPreg` de tipo numérico. Representa el número de preguntas de la encuesta.
+- Crea un array multidimensional de largo `numPreg`. Lo almacena en la variable `datos`.
+  - Solicita al usuario datos en formato `pregunta,opcion1,opcion2,...`.
+  - Utiliza el método `Array.from( x => f(x) )` para crear el array multidimensional.
+  - Los elementos de `datos` son arrays unidimensionales `[pregunta,opcion1,opcion2,opcion3,...]`.
+- Crea un array unidimensional de preguntas mediante función `map()`. Lo almacena en la variable `preguntas`.
+- Crea un array multidimensional de arrays de opciones mediante función `map()`. Lo almacena en la variable `opciones`.
+- Retorna un array multidimensional `[datos, preguntas, opciones]`.
 
 ### 3.3. Función `getVotos()` 
 ```JavaScript
-function getVotos(datos) {
-    const preguntas = datos.map(i => i[0]);
-    const opciones = datos.map(j => j.slice(1));
+function getVotos(numEnc, numPreg, preguntas, opciones) {
     return Array.from(
-        {length: datos.length},
-        (element,index) => [preguntas[index], prompt( `----- GENERADOR DE ENCUESTA -----\n\n Pregunta ${index+1}:    ${preguntas[index]}\n\n- ${opciones[index].join('\n- ' )}` )] );  
+        {length: numPreg},
+        (element,index) => prompt(`----- GENERADOR DE ENCUESTAS -----\n\n ENCUESTA N${numEnc}, Pregunta ${index+1}:\n\n ${preguntas[index]}\n\n- ${opciones[index].join('\n- ')}`) );
 };
 ```
-- Recibe un argumento `datos` de tipo array multidimensional.
-- Filtra elementos de `datos` y crea 2 arrays unidimensionales auxiliares `preguntas` y `opciones`, mediante el método  `map()`.
-- Crea y retorna un array multidimensional de largo `datos.length`.
+- Recibe 4 argumentos.
+  - `numEnc` de tipo numérico. Representa el valor de índice de la encuesta.
+  - `numPreg` de tipo numérico. Representa el número de preguntas de la encuesta.
+  - `preguntas` de tipo array unidimensional. Sus elementos son las preguntas de la encuesta.
+  - `opciones` de tipo array multidimensional. Sus elementos son arrays de opciones.
+- Crea y retorna un array multidimensional de largo `numPreg`.
   - Utiliza el método `Array.from( x => f(x) )` para crear el array retornado.
-  - Los elementos del array retornado son arrays unidimensionales `[pregunta,voto]`.
+  - Los elementos del array retornado son los votos de las preguntas de la encuesta.
 
 ### 3.4. Función `displayVotos()`
 ```JavaScript
-function displayVotos(votos) {
-    votos.forEach( (element,index) => {console.log(`resultado pregunta ${index+1} : ${element[1]}`)} );
-}
+function displayVotos(numEnc, votos) {
+    votos.forEach( (element,index) => {console.log(`Resultados Encuesta N${numEnc}: pregunta ${index+1} - ${element}`)} );
+};
 ```
-- Recibe un argumento `votos` de tipo array multidimensional.
-- Recorre el array `votos` y muestra el segundo elemento en consola.
+- Recibe 2 argumentos.
+  - `numEnc` de tipo numérico. Representa el valor de índice de la encuesta.
+  - `votos` de tipo array unidimensional. Sus elementos son los votos de las preguntas de la encuesta.
+- Recorre el array `votos` y muestra sus elementos en consola.
   - Utiliza el método `forEach()` para recorrer el array.
 
+### 3.5. Función `makeEncuestas()`
+```JavaScript
+function makeEncuestas(listaEnc, index) {
+    const encuestas = listaEnc;
+    const enc = {
+        numEnc: index,
+        numPreg: "",
+        datos: "",
+        preguntas: "",
+        opciones: "",
+        votos: "",
+    };    
+    enc.numPreg = getNumPreg(enc.numEnc);
+    [enc.datos, enc.preguntas, enc.opciones] = getDatos(enc.numEnc, enc.numPreg);
+    enc.votos = getVotos(enc.numEnc, enc.numPreg, enc.preguntas, enc.opciones);
+    displayVotos(enc.numEnc, enc.votos);
+    encuestas.push(enc);
+    let value = prompt( `----- GENERADOR DE ENCUESTAS -----\n\n ¿Desea Generar otra Encuesta? (s/n)` );
+    return (value != 'n') && (value !='N') ? makeEncuestas(encuestas, index+1) : encuestas;
+};
+```
+- Recibe 2 argumentos. 
+  - `listaEnc` de tipo array multidimensional. almacena objetos literal de tipo encuesta.
+  - `index` de tipo numérico. Representa el índice de un objeto encuesta.
+- Crea una variable `encuestas` de tipo array multidimensional y asigna el valor `listaEnc`.
+- Crea un objeto literal `enc` de tipo encuesta y asigna a atributo `numEnc` el valor `index`.
+- Asigna un valor a atributo `numPreg` mediante función `getNumPreg()`.
+- Asigna un valor a atributos `datos`, `preguntas`, `opciones` mediante función `getDatos()`.
+- Asigna un valor a atributo `votos` mediante función `getVotos()`.
+- Muestra elementos de atributo `votos` en consola, mediante función `displayVotos()`.
+- Guarda objeto `enc` en array `encuestas`, mediante función `push()`.
+- Solicita al usuario generar una nueva encuesta. Almacena respuesta en variable auxiliar `value`.
+- Retorna instrucción de operador ternario.
+  - Si `value` cumple la condición, la función `makeEncuestas()` se llama a sí misma con argumentos actualizados.
+  - Si `value` no cumple la condición, la función `makeEncuestas()` retorna `encuestas`, que corresponde a un array de objetos literal tipo encuesta.
+
+### 3.6. Código Principal
+```JavaScript
+let index = 1;
+let encuestas = makeEncuestas([],index);
+```
+- Declara variable `index`. Representa el índice del primer objeto encuesta.
+- Declara variable `encuestas` de tipo array multidimensional. Es un array de objetos literal tipo encuesta, la cual se le agregarán elementos mediante la función  `makeEncuestas()`. 
 ## 4. Conclusión
-
-En la solución POO, existen atributos que pudieron ser omitidos como por ejemplo `num`, `preguntas`, `opciones`. Sin embargo, se declaran a modo de buena práctica, ya que en una encuesta real es necesaria la mayor cantidad de información para gestionar y consultar una base de datos.
-
-Tanto en las soluciones POO y PF, existe una función/método `displayVotos()` que recorre un array multidimensional y sólo muestra el segundo sub-elemento `voto` del elemento `[pregunta,voto]`, en consola. Si bien el sub-elemento `pregunta` es redundante, su propósito es facilitar la lectura de datos y trabajo en equipo, al correlacionar cada *pregunta-voto*.
   
 Este proyecto permitió comprender y poner en práctica las ventajas y desventajas de ambos paradigmas. 
 
