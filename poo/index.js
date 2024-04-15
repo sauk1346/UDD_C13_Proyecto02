@@ -32,7 +32,6 @@ class Encuesta {
         this.votos.forEach( (element,index) => {console.log(`Resultados Encuesta N${this.numEnc}: pregunta ${index+1} - ${element}`)} );
     };
 };
-
 const encuestas = []; //array de objetos
 let value; // auxiliar, para condición de do-while
 let numEnc = 0; //contador de array de objetos
